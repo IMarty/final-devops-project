@@ -16,9 +16,11 @@ spec:
     spec:
       containers:
       - name: order-service
-        image: your-registry/order-service:v1.2.0
+        image: hashicorp/http-echo:0.2.3
+        args:
+        - "-text=Order Service - Processing orders in microshop cluster"
         ports:
-        - containerPort: 8080
+        - containerPort: 5678
         env:
         # Payment gateway credentials
         - name: STRIPE_API_KEY
@@ -49,13 +51,13 @@ spec:
             cpu: "500m"
         livenessProbe:
           httpGet:
-            path: /health
-            port: 8080
-          initialDelaySeconds: 30
+            path: /
+            port: 5678
+          initialDelaySeconds: 10
           periodSeconds: 10
         readinessProbe:
           httpGet:
-            path: /ready
-            port: 8080
+            path: /
+            port: 5678
           initialDelaySeconds: 5
           periodSeconds: 5

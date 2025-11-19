@@ -21,9 +21,11 @@ spec:
     spec:
       containers:
       - name: product-service
-        image: your-registry/product-service:v1.0.0  # Fixed: Use specific version tag
+        image: hashicorp/http-echo:0.2.3
+        args:
+        - "-text=Product Service - Running in microshop cluster"
         ports:
-        - containerPort: 8080
+        - containerPort: 5678
         env:
         # MongoDB credentials from secret
         - name: MONGODB_USERNAME
@@ -57,14 +59,14 @@ spec:
               key: log_level
         livenessProbe:
           httpGet:
-            path: /health
-            port: 8080
-          initialDelaySeconds: 30
+            path: /
+            port: 5678
+          initialDelaySeconds: 10
           periodSeconds: 10
         readinessProbe:
           httpGet:
-            path: /ready
-            port: 8080
+            path: /
+            port: 5678
           initialDelaySeconds: 5
           periodSeconds: 5
         resources:
