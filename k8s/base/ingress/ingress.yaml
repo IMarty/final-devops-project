@@ -1,6 +1,7 @@
 # Ingress Configuration with TLS
 # IMPORTANT: Replace microshop.example.com with your actual domain
 # IMPORTANT: Configure cert-manager ClusterIssuer for automated TLS
+# IMPORTANT: Using docker Desktop, we need to run : kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.0/deploy/static/provider/baremetal/deploy.yaml
 
 apiVersion: networking.k8s.io/v1
 kind: Ingress
