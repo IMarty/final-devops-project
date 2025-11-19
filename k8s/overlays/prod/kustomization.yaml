@@ -1,0 +1,39 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: microshop-prod
+
+bases:
+  - ../../base
+
+namePrefix: prod-
+
+replicas:
+  - name: frontend-service
+    count: 3
+  - name: product-service
+    count: 3
+  - name: order-service
+    count: 3
+  - name: mongodb
+    count: 3
+
+configMapGenerator:
+  - name: product-service-config
+    behavior: merge
+    literals:
+      - log_level=warn
+
+patchesJson6902:
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: product-service
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/memory
+        value: "512Mi"
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/memory
+        value: "1Gi"

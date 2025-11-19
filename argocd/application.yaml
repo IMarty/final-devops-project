@@ -1,0 +1,26 @@
+# ArgoCD Application Manifest (CORRECTED)
+# FIXES APPLIED:
+# 1. Changed namespace from 'default' to 'argocd' (where ArgoCD runs)
+# 2. Destination namespace should be 'microshop' (where app deploys)
+# 3. CreateNamespace=true is correct for creating namespace if it doesn't exist
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: microshop
+  namespace: argocd  # Fixed: ArgoCD resources belong in argocd namespace
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/IMarty/final-devops-project
+    targetRevision: main
+    path: k8s/overlays/dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: microshop  # Fixed: Application deploys to microshop namespace
+  syncPolicy:
+    automated:
+      prune: true      # Remove resources deleted from repo
+      selfHeal: true   # Sync when cluster state drifts
+    syncOptions:
+      - CreateNamespace=true  # Creates namespace if it doesn't exist

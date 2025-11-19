@@ -1,0 +1,24 @@
+# MongoDB Headless Service (CORRECTED)
+# FIXES APPLIED:
+# 1. Changed selector from 'app: mongodb-stateful' to 'app: mongodb' to match the StatefulSet
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-headless
+  namespace: microshop
+spec:
+  # This makes the service "Headless"
+  # DNS queries will return the IP addresses of individual Pods
+  clusterIP: None
+
+  # The selector must match the labels on the MongoDB StatefulSet's Pods
+  selector:
+    app: mongodb  # Fixed: Must match StatefulSet labels exactly
+
+  # The ports section defines how the service exposes the pods
+  ports:
+    # MongoDB's default port
+    - port: 27017
+      targetPort: 27017
+      name: mongodb
